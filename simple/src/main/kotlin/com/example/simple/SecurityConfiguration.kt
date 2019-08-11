@@ -1,6 +1,5 @@
 package com.example.simple
 
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties
 import org.springframework.boot.autoconfigure.security.oauth2.resource.UserInfoTokenServices
 import org.springframework.boot.context.properties.ConfigurationProperties
@@ -24,10 +23,7 @@ import javax.servlet.Filter
 @Configuration
 @EnableWebSecurity
 @EnableOAuth2Client
-class SecurityConfiguration : WebSecurityConfigurerAdapter() {
-
-    @Autowired
-    var oauth2ClientContext: OAuth2ClientContext? = null
+class SecurityConfiguration(val oauth2ClientContext: OAuth2ClientContext) : WebSecurityConfigurerAdapter() {
 
     override fun configure(http: HttpSecurity) {
         // @formatter:off
@@ -43,14 +39,6 @@ class SecurityConfiguration : WebSecurityConfigurerAdapter() {
         // @formatter:on
     }
 
-    @Bean
-    fun oauth2ClientFilterRegistration(filter: OAuth2ClientContextFilter): FilterRegistrationBean<OAuth2ClientContextFilter> {
-        val registration = FilterRegistrationBean<OAuth2ClientContextFilter>()
-        registration.filter = filter
-        registration.order = -100
-        return registration
-    }
-
     private fun ssoFilter(): Filter {
         val facebookFilter = OAuth2ClientAuthenticationProcessingFilter("/login/facebook")
         val facebookTemplate = OAuth2RestTemplate(facebook(), oauth2ClientContext)
@@ -59,6 +47,14 @@ class SecurityConfiguration : WebSecurityConfigurerAdapter() {
         tokenServices.setRestTemplate(facebookTemplate)
         facebookFilter.setTokenServices(tokenServices)
         return facebookFilter
+    }
+
+    @Bean
+    fun oauth2ClientFilterRegistration(filter: OAuth2ClientContextFilter): FilterRegistrationBean<OAuth2ClientContextFilter> {
+        val registration = FilterRegistrationBean<OAuth2ClientContextFilter>()
+        registration.filter = filter
+        registration.order = -100
+        return registration
     }
 
     @Bean

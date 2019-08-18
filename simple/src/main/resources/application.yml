@@ -1,7 +1,7 @@
 facebook:
   client:
-    clientId: 336970807211419
-    clientSecret: 6f66650eed2151d763344ca1a4ebae7a
+    clientId: <put here Facebook App clientId>
+    clientSecret: <put here Facebook App secret>
     accessTokenUri: https://graph.facebook.com/oauth/access_token
     userAuthorizationUri: https://www.facebook.com/dialog/oauth
     tokenName: oauth_token
@@ -10,6 +10,16 @@ facebook:
   resource:
     userInfoUri: https://graph.facebook.com/me
 
+github:
+  client:
+    clientId: <put here Github App clientId>
+    clientSecret: <put here Github App secret>
+    accessTokenUri: https://github.com/login/oauth/access_token
+    userAuthorizationUri: https://github.com/login/oauth/authorize
+    clientAuthenticationScheme: form
+  resource:
+    userInfoUri: https://api.github.com/user
+
 logging:
   level:
-    org.springframework.security: DEBUG
+    org.springframework.security: INFO

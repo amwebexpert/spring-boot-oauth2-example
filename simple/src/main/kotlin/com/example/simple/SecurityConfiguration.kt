@@ -38,7 +38,7 @@ class SecurityConfiguration(val oauth2ClientContext: OAuth2ClientContext) : WebS
                 .and()
                 .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 .and()
-                .addFilterBefore(ssoCompositeFilter(), BasicAuthenticationFilter::class.java)
+                .addFilterBefore(ssoCompositeFilter(), BasicAuthenticationFilter::class.java as Class<out Filter>?)
         // @formatter:on
     }
 
